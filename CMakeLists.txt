@@ -358,6 +358,12 @@ if (XQC_ENABLE_TESTING)
     )
 
     set(
+        DEMO_CLIENT_HELLO_SOURCES
+        ${HQ_SOURCES}
+        "demo/demo_client_hello.c"
+    )
+
+    set(
         DEMO_SERVER_SOURCES
         ${HQ_SOURCES}
         "demo/demo_server.c"
@@ -365,6 +371,7 @@ if (XQC_ENABLE_TESTING)
 
     add_executable(demo_server ${DEMO_SERVER_SOURCES} ${GETOPT_SOURCES})
     add_executable(demo_client ${DEMO_CLIENT_SOURCES} ${GETOPT_SOURCES})
+    add_executable(demo_client_hello ${DEMO_CLIENT_HELLO_SOURCES} ${GETOPT_SOURCES})
     if(CMAKE_SYSTEM_NAME  MATCHES "Windows")
         if (NOT EVENT_LIB_DIR)
             message("YOU NEED SET -DEVENT_LIB_DIR=your_event_path, eg:-DEVENT_LIB_DIR=D:/project/vcpkg/packages/libevent_x64-windows-static")
@@ -387,21 +394,25 @@ if (XQC_ENABLE_TESTING)
         target_link_libraries(test_client xquic  -lm ${CMAKE_CURRENT_SOURCE_DIR}/../libevent32/lib/libevent.dylib)
         target_link_libraries(demo_server xquic  -lm ${CMAKE_CURRENT_SOURCE_DIR}/../libevent32/lib/libevent.dylib)
         target_link_libraries(demo_client xquic  -lm ${CMAKE_CURRENT_SOURCE_DIR}/../libevent32/lib/libevent.dylib)
+        target_link_libraries(demo_client_hello xquic  -lm ${CMAKE_CURRENT_SOURCE_DIR}/../libevent32/lib/libevent.dylib)
     elseif(PLATFORM STREQUAL "mac")
         target_link_libraries(test_server xquic -lm -L/usr/local/lib -levent)
         target_link_libraries(test_client xquic -lm -L/usr/local/lib -levent)
         target_link_libraries(demo_server xquic -lm -L/usr/local/lib -levent)
         target_link_libraries(demo_client xquic -lm -L/usr/local/lib -levent)
+        target_link_libraries(demo_client_hello xquic -lm -L/usr/local/lib -levent)
     elseif(CMAKE_SYSTEM_NAME  MATCHES "Windows")
         target_link_libraries(test_server xquic ${EVENT_LIB_PATH} -lm)
         target_link_libraries(test_client xquic ${EVENT_LIB_PATH} -lm)
         target_link_libraries(demo_server xquic ${EVENT_LIB_PATH} -lm)
         target_link_libraries(demo_client xquic ${EVENT_LIB_PATH} -lm)
+        target_link_libraries(demo_client_hello xquic ${EVENT_LIB_PATH} -lm)
     else()
         target_link_libraries(test_server xquic -levent -lm)
         target_link_libraries(test_client xquic -levent -lm)
         target_link_libraries(demo_server xquic -levent -lm)
         target_link_libraries(demo_client xquic -levent -lm)
+        target_link_libraries(demo_client_hello xquic -levent -lm)
     endif()
 
 endif()
